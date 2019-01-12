@@ -1,0 +1,4 @@
+*.dll
+*.*.hash
+tools/
+output/
