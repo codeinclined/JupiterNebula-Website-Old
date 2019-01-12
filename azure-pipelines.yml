@@ -22,7 +22,7 @@ steps:
 - script: dotnet tool install -g Wyam.Tool
   displayName: Install Wyam
 
-- script: wyam
+- script: wyam build
   displayName: Build Site
 
 - task: ArchiveFiles@2
