@@ -1,0 +1,44 @@
+# Based on guide located at https://blizard.io/posts/deploying-a-wyam-site-using-azure-devops-to-netlify
+
+trigger:
+- master
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+  configuration: debug
+  platform: x64
+
+steps:
+#- task: DotNetCoreInstaller@0
+#  displayName: Install .NET Core SDK
+#  name: install_dotnetcore_sdk
+#  enabled: true
+#  inputs:
+#    packageType: 'sdk'
+#    version: ''
+
+- script: dotnet tool install -g Wyam.Tool
+  displayName: Install Wyam
+
+- script: wyam
+  displayName: Build Site
+
+- task: ArchiveFiles@2
+  displayName: Zip Site
+  inputs:
+    rootFolderOrFile: '$(Agent.BuildDirectory)/s/output'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- script: >-
+      curl
+      -H 'Authorization: Bearer $(netlifyAccessToken)'
+      -H 'Content-Type: application/zip'
+      --data-binary '@$(Build.BuildId).zip'
+      https://api.netlify.com/api/v1/sites/$(netlifySiteId)/deploys
+  workingDirectory: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Upload to Netlify'
