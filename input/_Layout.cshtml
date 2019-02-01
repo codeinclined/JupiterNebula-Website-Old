@@ -1,0 +1,32 @@
+@{
+    var BlogTitle = Context.String(BlogKeys.Title);
+    var PageTitle = Model.WithoutSettings.String(BlogKeys.Title);
+    var HeaderText = string.IsNullOrWhiteSpace(PageTitle) ? Context.String(BlogKeys.Description) : PageTitle;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        @Html.Partial("_SharedMeta")
+        @RenderSection("PageMeta", required: false)
+
+        @Html.Partial("_SharedStylesheets")
+        @RenderSection("PageStylesheets", required: false)
+
+        <title>@Html.Raw($"{BlogTitle} - {HeaderText}")</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="jumbotron">
+                <h1 class="display-4">@HeaderText</h1>
+                <hr/>
+                @Html.Partial("_SocialMediaIcons")
+            </div>
+
+            @RenderBody()
+        </div>
+
+        @Html.Partial("_SharedScripts")
+        @RenderSection("PageScripts", required: false)
+    </body>
+</html>

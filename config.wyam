@@ -1,10 +1,13 @@
 // code: language=csharp insertSpaces=true tabSize=4
 
 #recipe Blog
+#theme BlogTemplate
 
 // Customize your settings and add new ones here
 Settings[Keys.Host] = "jupiternebula.com";
 Settings[BlogKeys.Title] = "JupiterNebula";
+Settings[BlogKeys.Intro] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus euismod quis augue vel hendrerit. Duis at congue lectus. Vestibulum ornare.";
 Settings[BlogKeys.Description] = "Josh Taylor's Blog";
+Settings[BlogKeys.NetlifyRedirects] = true;
 
 // Add any pipeline customizations here
