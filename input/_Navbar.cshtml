@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="@Context.GetLink("/")">JupiterNebula</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                @{
+                    List<Tuple<string, string>> pages = 
+                        Context.Documents[Blog.Pages]
+                                .Where(p => p.Bool(BlogKeys.ShowInNavbar, true))
+                                .Where(p => p.FilePath(Keys.RelativeFilePath)?.FullPath?.StartsWith("index") == (bool?)false)
+                                .Select(p => Tuple.Create(p.WithoutSettings.String(Keys.Title), Context.GetLink(p)))
+                                .Where(p => !string.IsNullOrEmpty(p.Item1))
+                                .OrderBy(p => p.Item1)
+                                .ToList();
+                    
+                    if (Documents[Blog.Tags].Any())
+                    {
+                        pages.Insert(0, Tuple.Create("Tags", Context.GetLink("tags/index.html")));
+                    }
+                    if (Documents[Blog.BlogPosts].Any() && Context.Bool(BlogKeys.GenerateArchive))
+                    {
+                        pages.Insert(0, Tuple.Create("Archive", Context.GetLink($"{Context.String(BlogKeys.PostsPath)}/index.html")));
+                    }
+                    foreach (Tuple<string, string> page in pages)
+                    {
+                        <li class="nav-item active"><a class="nav-link" href="@(page.Item2)">@(page.Item1)</a></li>
+                    }
+                }
+            </ul>
+            <div class="navbar-nav">
+                @Html.Partial("_SocialMediaIcons")
+            </div>
+        </div>
+    </div>
+</nav>

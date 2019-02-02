@@ -1,7 +1,8 @@
 @{
     var BlogTitle = Context.String(BlogKeys.Title);
     var PageTitle = Model.WithoutSettings.String(BlogKeys.Title);
-    var HeaderText = string.IsNullOrWhiteSpace(PageTitle) ? Context.String(BlogKeys.Description) : PageTitle;
+    var HeaderShortText = string.IsNullOrWhiteSpace(PageTitle) ? "Josh Taylor" : PageTitle;
+    var HeaderText = string.IsNullOrWhiteSpace(PageTitle) ? "Josh Taylor's Blog" : PageTitle;
 }
 
 <!DOCTYPE html>
@@ -16,11 +17,12 @@
         <title>@Html.Raw($"{BlogTitle} - {HeaderText}")</title>
     </head>
     <body>
+        @Html.Partial("_Navbar")
+
         <div class="container">
             <div class="jumbotron">
-                <h1 class="display-4">@HeaderText</h1>
-                <hr/>
-                @Html.Partial("_SocialMediaIcons")
+                <h1 class="display-4 d-none d-sm-block">@HeaderText</h1>
+                <h1 class="display-4 d-block d-sm-none text-center">@HeaderShortText</h1>
             </div>
 
             @RenderBody()

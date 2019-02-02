@@ -2,7 +2,7 @@
                           .OrderByDescending(p => p.Get<DateTime>(BlogKeys.Published))
                           .Take(5))
 {
-    <div class="col-sm">
+    <div class="col-12 col-lg-6 col-xl-4">
         <div class="card mb-3">
             <div class="btn-group">
                 <a role="button" href="@Context.GetLink(post)" class="btn btn-primary btn-lg text-left">@post.WithoutSettings.String(BlogKeys.Title)</a>
