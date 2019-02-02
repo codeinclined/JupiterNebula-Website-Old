@@ -2,6 +2,7 @@
 
 #recipe Blog
 #theme BlogTemplate
+#nuget Wyam.Minification
 
 // Customize your settings and add new ones here
 Settings[Keys.Host] = "jupiternebula.com";
@@ -11,3 +12,8 @@ Settings[BlogKeys.Description] = "Josh Taylor's Blog";
 Settings[BlogKeys.NetlifyRedirects] = true;
 
 // Add any pipeline customizations here
+Pipelines.Add("Minify HTML",
+    Documents().Where((doc, ctx) => doc.Metadata.String(Keys.DestinationFileExt) == ".html"),
+    MinifyHtml(),
+    WriteFiles()
+);
