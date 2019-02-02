@@ -1,4 +1,4 @@
-[![Build Status](https://jupiternebula.visualstudio.com/JupiterNebula-Website/_apis/build/status/JupiterNebula.JupiterNebula-Website?branchName=master)](https://jupiternebula.visualstudio.com/JupiterNebula-Website/_build/latest?definitionId=1?branchName=master)
+[![Build Status](https://dev.azure.com/taylorjoshuaw/JupiterNebula-Website/_apis/build/status/taylorjoshuaw.JupiterNebula-Website?branchName=master)](https://dev.azure.com/taylorjoshuaw/JupiterNebula-Website/_build/latest?definitionId=1&branchName=master)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/5ae84d57-4dce-423b-96f0-7010a1e6699b/deploy-status)](https://app.netlify.com/sites/serene-stonebraker-113a52/deploys)
 
 [Link to Production JupiterNebula Website](https://jupiternebula.com)
