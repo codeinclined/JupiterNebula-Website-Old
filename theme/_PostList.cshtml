@@ -3,11 +3,12 @@
 {
     <div class="col-12 col-lg-6 col-xl-4">
         <div class="card mb-3">
-            <div class="btn-group">
-                <a role="button" href="@Context.GetLink(post)" class="btn btn-primary btn-lg text-left">@post.WithoutSettings.String(BlogKeys.Title)</a>
+            <div class="card-header pb-0 pt-3">
+                <a role="button" href="@Context.GetLink(post)" class=""><h4>@post.WithoutSettings.String(BlogKeys.Title)</h4></a>
+                <p class="text-muted">Posted @(post.Get<DateTime>(BlogKeys.Published).ToLongDateString(Context))</p>
             </div>
             <div class="card-body pb-1">
-                <div class="">
+                <div class="mb-0">
                     @if(Context.Bool(BlogKeys.IndexFullPosts))
                     {
                         @Html.Raw(post.Content)
@@ -17,11 +18,12 @@
                         @Html.Raw(post.String(BlogKeys.Excerpt))
                     }
                 </div>
-
-                <p class="text-muted">Posted @(post.Get<DateTime>(BlogKeys.Published).ToLongDateString(Context))</p>
+                <a href="@Context.GetLink(post)" class="btn btn-link mb-2 mb-xl-3 pl-0"><span class="fas fa-align-left pr-2"></span>Continue Reading...</a>
             </div>
 
-            @Html.Partial("_TagButtons", post.Get<IEnumerable<string>>(BlogKeys.Tags))
+            <div class="card-footer pt-1 pb-1">
+                @Html.Partial("_TagButtons", post.Get<IEnumerable<string>>(BlogKeys.Tags))
+            </div>
         </div>
     </div>
 }

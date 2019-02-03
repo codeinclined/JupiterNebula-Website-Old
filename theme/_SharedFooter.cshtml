@@ -1,0 +1,22 @@
+<div class="row mt-4">
+    <div class="ml-auto mr-auto mr-md-3">
+        @if (!string.IsNullOrWhiteSpace(Context.String(BlogKeys.RssPath))) {
+            <a class="btn btn-sm btn-warning" href="@Context.GetLink(Context.String(BlogKeys.RssPath))"><span class="fa fa-rss"></span> RSS Feed</a>
+        } 
+        @if (!string.IsNullOrWhiteSpace(Context.String(BlogKeys.AtomPath))) { 
+            <a class="btn btn-sm btn-warning" href="@Context.GetLink(Context.String(BlogKeys.AtomPath))"><span class="fa fa-rss"></span> Atom Feed</a>
+        }
+    </div>
+</div>
+<hr/>
+<div class="d-flex flex-column flex-sm-row text-muted mb-3 justify-content-between">
+    <div class="d-flex flex-column">
+        <small>Text licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> - <a href="https://jupiternebula.com">jupiternebula.com</a></small>
+        <small>Source code licensed under the <a href="https://github.com/taylorjoshuaw/JupiterNebula-Website/blob/master/LICENSE">MIT License</a></small>
+        <small>Source code available on <a href="https://github.com/taylorjoshuaw/JupiterNebula-Website">GitHub</a></small>
+    </div>
+    <div class="d-flex flex-column">
+        <small>Page generated with <a href="https://wyam.io">Wyam</a></small>
+        <small>Hosting provided by <a href="https://netlify.com">Netlify</a></small>
+    </div>
+</div>

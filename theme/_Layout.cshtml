@@ -21,11 +21,12 @@
 
         <div class="container">
             <div class="jumbotron">
-
                 @RenderSection("PageHeader", required: false)
             </div>
 
             @RenderBody()
+
+            @Html.Partial("_SharedFooter")
         </div>
 
         @Html.Partial("_SharedScripts")
