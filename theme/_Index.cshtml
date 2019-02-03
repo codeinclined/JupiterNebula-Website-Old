@@ -1,5 +1,49 @@
+@section PageHeader
+{
+    <h1 class="display-4 d-none d-sm-block">Josh Taylor&#x27;s Blog</h1>
+    <p class="h1 display-4 d-block d-sm-none text-center">Josh Taylor</p>
+
+    @{
+        var pageTitle = Model.WithoutSettings.String(BlogKeys.Title);
+
+        if (!string.IsNullOrWhiteSpace(pageTitle))
+        {
+            <h3 class="text-center text-sm-left">@pageTitle</h3>
+        }
+    }
+}
+
 <p class="lead">@Context.String(BlogKeys.Intro)</p>
 
 <div class="row">
     @Html.Partial("_PostList")
+</div>
+<div class="row mt-3">
+    <div class="ml-auto mr-auto align-middle">
+        <div class="btn-group" role="toolbar" aria-label="Pagination Buttons">
+            @if(Model.Bool(Keys.HasPreviousPage))
+            {
+                <a class="btn btn-primary" href="@(Context.GetLink(Documents[Blog.Index].FirstOrDefault()))" aria-label="Go to first index page">
+                    <span class="fas fa-angle-double-left mr-1" aria-hidden="true"></span>
+                    <span class="d-none d-sm-inline">First</span>
+                </a>
+                <a class="btn btn-info" href="@(Context.GetLink(Model.Document(Keys.PreviousPage)))">
+                    <span class="fas fa-angle-left mr-1" aria-hidden="true"></span>
+                    <span class="d-none d-sm-inline">Newer</span>
+                </a>
+            }
+
+            <a class="btn btn-light" href="@(Context.GetLink(Documents[Blog.BlogArchive].FirstOrDefault()))"><span class="d-none">Page </span>@Model.String(Keys.CurrentPage) / @Model.String(Keys.TotalPages)</a>
+
+            @if(Model.Bool(Keys.HasNextPage))
+            {
+                <a class="btn btn-info" href="@(Context.GetLink(Model.Document(Keys.NextPage)))">
+                    <span class="d-none d-sm-inline">Older</span>
+                    <span class="fas fa-angle-right ml-1" aria-hidden="true"></span></a>
+                <a class="btn btn-primary" href="@(Context.GetLink(Documents[Blog.Index].LastOrDefault()))">
+                    <span class="d-none d-sm-inline">Last</span>
+                    <span class="fas fa-angle-double-right ml-1" aria-hidden="true"></span></a>
+            }
+        </div>
+    </div>
 </div>

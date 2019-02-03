@@ -4,16 +4,21 @@
 #theme BlogTemplate
 #nuget Wyam.Minification
 
-// Customize your settings and add new ones here
 Settings[Keys.Host] = "jupiternebula.com";
 Settings[BlogKeys.Title] = "JupiterNebula";
 Settings[BlogKeys.Intro] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus euismod quis augue vel hendrerit. Duis at congue lectus. Vestibulum ornare.";
 Settings[BlogKeys.Description] = "Josh Taylor's Blog";
+Settings[BlogKeys.IndexPaging] = true;
+Settings[BlogKeys.IndexPageSize] = 3;
 Settings[BlogKeys.NetlifyRedirects] = true;
 
-// Add any pipeline customizations here
-Pipelines.Add("Minify HTML",
-    Documents().Where((doc, ctx) => doc.Metadata.String(Keys.DestinationFileExt) == ".html"),
-    MinifyHtml(),
-    WriteFiles()
-);
+// MinifyHtml interferes with live reload when developing using Wyam's embedded HTTP server.
+// Set "minify" to false via the CLI option "-s minify=false" as a workaround. Defaults to true.
+if (Settings.Bool("minify", true))
+{
+    Pipelines.Add("Minify HTML",
+        Documents().Where((doc, ctx) => doc.Metadata.String(Keys.DestinationFileExt) == ".html"),
+        MinifyHtml(),
+        WriteFiles()
+    );
+}

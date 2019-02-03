@@ -21,8 +21,8 @@
 
         <div class="container">
             <div class="jumbotron">
-                <h1 class="display-4 d-none d-sm-block">@HeaderText</h1>
-                <h1 class="display-4 d-block d-sm-none text-center">@HeaderShortText</h1>
+
+                @RenderSection("PageHeader", required: false)
             </div>
 
             @RenderBody()

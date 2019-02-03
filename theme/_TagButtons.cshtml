@@ -1,0 +1,17 @@
+@model IEnumerable<string>
+
+@if(Model.Any())
+{
+    <span class="btn-group">
+        @foreach(var tag in Model.OrderBy(t => t))
+        {
+            var tagDocument = Documents[Blog.Tags].FirstOrDefault(t => t.String(BlogKeys.Tag) == tag &&
+                                                                       t.Get<int>(Keys.CurrentPage) == 1);
+            
+            if(tagDocument != null)
+            {
+                <a role="button" href="@Context.GetLink(tagDocument)" class="btn btn-secondary btn-sm">@tag</a>
+            }
+        }
+    </span>
+}

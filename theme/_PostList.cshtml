@@ -1,6 +1,5 @@
 @foreach(var post in Model.DocumentList(Keys.PageDocuments)
-                          .OrderByDescending(p => p.Get<DateTime>(BlogKeys.Published))
-                          .Take(5))
+                          .OrderByDescending(p => p.Get<DateTime>(BlogKeys.Published)))
 {
     <div class="col-12 col-lg-6 col-xl-4">
         <div class="card mb-3">
@@ -22,25 +21,7 @@
                 <p class="text-muted">Posted @(post.Get<DateTime>(BlogKeys.Published).ToLongDateString(Context))</p>
             </div>
 
-            @{
-                var tags = post.Get<IEnumerable<string>>(BlogKeys.Tags);
-
-                if(tags.Any())
-                {
-                    <div class="btn-group">
-                        @foreach(var tag in tags.OrderBy(t => t))
-                        {
-                            var tagDocument = Documents[Blog.Tags].FirstOrDefault(t => t.String(BlogKeys.Tag) == tag &&
-                                                                                  t.Get<int>(Keys.CurrentPage) == 1);
-                            
-                            if(tagDocument != null)
-                            {
-                                <a role="button" href="@Context.GetLink(tagDocument)" class="btn btn-secondary btn-sm">@tag</a>
-                            }
-                        }
-                    </div>
-                }
-            }
+            @Html.Partial("_TagButtons", post.Get<IEnumerable<string>>(BlogKeys.Tags))
         </div>
     </div>
 }
