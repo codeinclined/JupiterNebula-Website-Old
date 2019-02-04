@@ -1,14 +1,16 @@
 @foreach(var post in Model.DocumentList(Keys.PageDocuments)
                           .OrderByDescending(p => p.Get<DateTime>(BlogKeys.Published)))
 {
+    var contentExceedsExcerpt = post.String(BlogKeys.Excerpt).Length < post.Content.Length - 1;
+
     <div class="col-12 col-lg-6 col-xl-4">
         <div class="card mb-3">
             <div class="card-header pb-0 pt-3">
                 <a role="button" href="@Context.GetLink(post)" class=""><h4>@post.WithoutSettings.String(BlogKeys.Title)</h4></a>
                 <p class="text-muted">Posted @(post.Get<DateTime>(BlogKeys.Published).ToLongDateString(Context))</p>
             </div>
-            <div class="card-body pb-1">
-                <div class="mb-0">
+            <div class="card-body pb-0">
+                <div class="mb-0 @(contentExceedsExcerpt ? "fade-out" : "")">
                     @if(Context.Bool(BlogKeys.IndexFullPosts))
                     {
                         @Html.Raw(post.Content)
@@ -18,7 +20,10 @@
                         @Html.Raw(post.String(BlogKeys.Excerpt))
                     }
                 </div>
-                <a href="@Context.GetLink(post)" class="btn btn-link mb-2 mb-xl-3 pl-0"><span class="fas fa-align-left pr-2"></span>Continue Reading...</a>
+                @if(contentExceedsExcerpt)
+                {
+                    <a href="@Context.GetLink(post)" class="btn btn-link mb-2 mb-xl-3 pl-0"><span class="fas fa-align-left pr-2"></span>Continue Reading...</a>
+                }
             </div>
 
             <div class="card-footer pt-1 pb-1">
