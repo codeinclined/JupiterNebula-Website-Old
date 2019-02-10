@@ -1,0 +1,32 @@
+@mixin div-fade-fg-bottom($bgcolor, $percentage) {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: $percentage;
+
+        background: -webkit-linear-gradient(
+            transparentize($bgcolor, 1) 0%,
+            transparentize($bgcolor, 0) 100%
+        );
+        background-image: -moz-linear-gradient(
+            transparentize($bgcolor, 1) 0%,
+            transparentize($bgcolor, 0) 100%
+        );
+        background-image: -o-linear-gradient(
+            transparentize($bgcolor, 1) 0%,
+            transparentize($bgcolor, 0) 100%
+        );
+        background-image: linear-gradient(
+            transparentize($bgcolor, 1) 0%,
+            transparentize($bgcolor, 0) 100%
+        );
+        background-image: -ms-linear-gradient(
+            transparentize($bgcolor, 1) 0%,
+            transparentize($bgcolor, 0) 100%
+        );
+    }
+}

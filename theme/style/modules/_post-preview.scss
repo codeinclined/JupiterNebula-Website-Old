@@ -1,0 +1,8 @@
+@import '../base/variables';
+@import '../base/mixins/div-fade-fg-bottom';
+
+.post-preview {
+    div &-long {
+        @include div-fade-fg-bottom($card-bg, 37.5%);
+    }
+}

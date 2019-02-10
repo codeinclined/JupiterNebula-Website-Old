@@ -12,10 +12,23 @@ Settings[BlogKeys.IndexPaging] = true;
 Settings[BlogKeys.IndexPageSize] = 3;
 Settings[BlogKeys.NetlifyRedirects] = true;
 
-// MinifyHtml interferes with live reload when developing using Wyam's embedded HTTP server.
-// Set "minify" to false via the CLI option "-s minify=false" as a workaround. Defaults to true.
+// Run the minifiers unless "minify" is set to false via the command line options.
+// MinifyHtml() interferes with live reload, so make sure "minify" is set to false
+// while developing using Wyam's embedded HTTP server
 if (Settings.Bool("minify", true))
 {
+    Pipelines.Add("Minify CSS",
+        Documents().Where((doc, ctx) => doc.Metadata.String(Keys.DestinationFileExt) == ".css"),
+        MinifyCss(),
+        WriteFiles()
+    );
+
+    Pipelines.Add("Minify JS",
+        Documents().Where((doc, ctx) => doc.Metadata.String(Keys.DestinationFileExt) == ".js"),
+        MinifyJs(),
+        WriteFiles(".js")
+    );
+
     Pipelines.Add("Minify HTML",
         Documents().Where((doc, ctx) => doc.Metadata.String(Keys.DestinationFileExt) == ".html"),
         MinifyHtml(),
