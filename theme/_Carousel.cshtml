@@ -1,0 +1,30 @@
+@model IEnumerable<string>
+
+@{
+    var carouselGuid = $"carousel__{Guid.NewGuid().ToString()}";
+}
+
+<div class="col-12 col-xl-9 col-lg-8 ml-auto mr-auto">
+    <div id="@carouselGuid" class="carousel slide carousel-height-400px carousel-height-xl-600px" data-ride="carousel">
+        <div class="carousel-inner">
+            @{
+                int carouselImageCount = 0;
+
+                foreach(var imageUrl in Model)
+                {
+                    <div class="carousel-item @(carouselImageCount == 0 ? "active" : "")">
+                        <img class="d-block ml-auto mr-auto" src="@imageUrl" alt="Slide @(++carouselImageCount)">
+                    </div>
+                }
+            }
+        </div>
+        <a class="carousel-control-prev" href="#@carouselGuid" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#@carouselGuid" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
