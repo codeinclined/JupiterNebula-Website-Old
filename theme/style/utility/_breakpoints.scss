@@ -1,0 +1,13 @@
+@import '../vendor/bootstrap/mixins/breakpoints';
+
+@mixin create-breakpoints($subclass-prefix: '', $subclass-suffix: '') {
+    @each $breakpoint in map-keys($grid-breakpoints) {
+        @include media-breakpoint-up($breakpoint) {
+            $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+            &#{&}#{$subclass-prefix}#{$infix}#{$subclass-suffix} {
+                @content;
+            }
+        }
+    }
+}

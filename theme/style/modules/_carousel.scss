@@ -1,4 +1,4 @@
-@import '../base/variables';
+@import '../utility/breakpoints';
 
 .carousel {
     .carousel-item {
@@ -11,21 +11,11 @@
         }
     }
 
-    &-height-200 {
-        .carousel-item img {
-            height: 200px;
-        }
-    }
-
-    &-height-400 {
-        .carousel-item img {
-            height: 400px;
-        }
-    }
-
-    &-height-800 {
-        .carousel-item img {
-            height: 800px;
+    @each $height in $carousel-max-heights {
+        @include create-breakpoints('-height', '-#{$height}') {
+            .carousel-item img {
+                height: $height;
+            }
         }
     }
 }
