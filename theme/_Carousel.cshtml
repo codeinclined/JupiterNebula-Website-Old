@@ -10,7 +10,7 @@
             @{
                 int carouselImageCount = 0;
 
-                foreach(var imageUrl in Model)
+                foreach (var imageUrl in Model)
                 {
                     <div class="carousel-item @(carouselImageCount == 0 ? "active" : "")">
                         <img class="d-block ml-auto mr-auto" src="@imageUrl" alt="Slide @(++carouselImageCount)">
