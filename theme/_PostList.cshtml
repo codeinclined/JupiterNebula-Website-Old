@@ -1,9 +1,10 @@
 @foreach(var post in Model.DocumentList(Keys.PageDocuments)
                           .OrderByDescending(p => p.Get<DateTime>(BlogKeys.Published)))
 {
-    var contentExceedsExcerpt = post.String(BlogKeys.Excerpt).Length < post.Content.Length - 1;
+    var contentExceedsExcerpt = post.String(BlogKeys.Excerpt).Length +
+        post.String(BlogKeys.Title).Length < post.Content.Length - 2;
 
-    <div class="post-preview col-12 col-lg-6 col-xl-4">
+    <div class="post-preview col-12 col-lg-6">
         <div class="card mb-3">
             <div class="card-header pb-0 pt-3">
                 <a role="button" href="@Context.GetLink(post)" class=""><h4>@post.WithoutSettings.String(BlogKeys.Title)</h4></a>

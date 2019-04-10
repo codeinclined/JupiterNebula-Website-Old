@@ -3,3 +3,6 @@
 config.wyam.packages.xml
 tools/
 output/
+bin/
+obj/
+wwwroot/

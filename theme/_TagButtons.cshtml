@@ -1,19 +1,21 @@
 @model IEnumerable<string>
 
-<span class="fas fa-hashtag mr-2"></span>
+<div class="tag-list">
+    <span class="fas fa-hashtag"></span>
 
-@if(Model.Any())
-{
-    <span class="btn-group">
-        @foreach(var tag in Model.OrderBy(t => t))
-        {
-            var tagDocument = Documents[Blog.Tags].FirstOrDefault(t => t.String(BlogKeys.Tag) == tag &&
-                                                                       t.Get<int>(Keys.CurrentPage) == 1);
-            
-            if(tagDocument != null)
+    @if(Model.Any())
+    {
+        <span class="btn-group flex-wrap">
+            @foreach(var tag in Model.OrderBy(t => t.Length))
             {
-                <a role="button" href="@Context.GetLink(tagDocument)" class="btn btn-secondary btn-sm">@tag</a>
+                var tagDocument = Documents[Blog.Tags].FirstOrDefault(t => t.String(BlogKeys.Tag) == tag &&
+                                                                        t.Get<int>(Keys.CurrentPage) == 1);
+                
+                if(tagDocument != null)
+                {
+                    <a role="button" href="@Context.GetLink(tagDocument)" class="btn btn-secondary btn-sm">@tag</a>
+                }
             }
-        }
-    </span>
-}
+        </span>
+    }
+</div>

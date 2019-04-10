@@ -6,8 +6,10 @@
 
 @section PageHeader {
     <h1>@Model.WithoutSettings.String(BlogKeys.Title)</h1>
-    <p>Published on <span class="d-none d-sm-inline">@Published.ToLongDateString()</span><span class="d-inline d-sm-none">@Published.ToShortDateString()</span></p>
+    <p>Posted on <span class="d-none d-sm-inline">@Published.ToLongDateString()</span><span class="d-inline d-sm-none">@Published.ToShortDateString()</span></p>
     @Html.Partial("_TagButtons", Model.Get<IEnumerable<string>>(BlogKeys.Tags) ?? Enumerable.Empty<string>())
 }
 
-@RenderBody()
+<div class="container">
+    @RenderBody()
+</div>

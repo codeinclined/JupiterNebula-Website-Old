@@ -1,0 +1,14 @@
+@import '../base/mixins/css-grid';
+
+.tag-list {
+    @include grid(1fr, 1.5em auto);
+
+    .fa-hashtag {
+        @include grid-cell(1, 2, 1, 2);
+        @include grid-align-self(center);
+    }
+
+    .btn {
+        @include grid-cell(1, 2, 2, 3);
+    }
+}
