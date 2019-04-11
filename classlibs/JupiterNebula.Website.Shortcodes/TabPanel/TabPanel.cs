@@ -1,10 +1,7 @@
 using HtmlAgilityPack;
 using shortid;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using Wyam.Common.Documents;
 using Wyam.Common.Execution;
 using Wyam.Common.Shortcodes;
@@ -43,7 +40,7 @@ namespace JupiterNebula.Website.Shortcodes.TabPanel
                 var tabContentElement = tabElement.SelectSingleNode("./div");
 
                 tabContentElement.Id = $"{idPrefix}-{idSuffix++}";
-                tabContentElement.AddClass("tab-pane fade");
+                tabContentElement.AddClass("tab-pane");
                 tabContentElement.SetAttributeValue("role", "tabpanel");
                 tabContentElement.SetAttributeValue("aria-labelledby", tabContentElement.Id + "-tab");
 

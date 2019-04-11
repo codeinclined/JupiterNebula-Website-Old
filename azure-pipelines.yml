@@ -7,17 +7,16 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  configuration: debug
+  configuration: release
   platform: x64
 
 steps:
-- task: DotNetCoreInstaller@0
-  displayName: Install .NET Core SDK
-  name: install_dotnetcore_sdk
-  enabled: true
+- task: DotNetCoreCLI@2
+  displayName: Build classlib projects
   inputs:
-    packageType: 'sdk'
-    version: '2.2.102'
+    command: build
+    projects: 'classlibs/**/*.csproj'
+    arguments: '--configuration $(configuration)'
 
 - script: dotnet tool install -g Wyam.Tool
   displayName: Install Wyam
