@@ -11,6 +11,14 @@ variables:
   platform: x64
 
 steps:
+- task: DotNetCoreInstaller@0
+  displayName: Install .NET Core SDK
+  name: install_dotnetcore_sdk
+  enabled: true
+  inputs:
+    packageType: 'sdk'
+    version: '2.2.203'
+
 - task: DotNetCoreCLI@2
   displayName: Build classlib projects
   inputs:
