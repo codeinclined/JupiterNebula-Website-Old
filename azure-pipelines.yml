@@ -17,7 +17,7 @@ steps:
   enabled: true
   inputs:
     packageType: 'sdk'
-    version: '2.2.203'
+    version: '2.2.102'
 
 - task: DotNetCoreCLI@2
   displayName: Build classlib projects
