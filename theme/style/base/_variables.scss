@@ -1,5 +1,8 @@
-// Site-wide Variables
+// Site-wide variables
 $carousel-max-heights: 200px, 400px, 600px, 800px;
+
+// Bootstrap variable overrides
+$transition-fade: opacity .175s ease-in;
 
 // Bring in the Bootswatch theme's variables
 @import '../vendor/bootswatch/dist/darkly/variables';

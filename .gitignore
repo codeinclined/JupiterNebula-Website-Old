@@ -1,5 +1,6 @@
 *.dll
 *.*.hash
+.vs/
 config.wyam.packages.xml
 tools/
 output/

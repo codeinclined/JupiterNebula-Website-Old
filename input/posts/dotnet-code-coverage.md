@@ -8,94 +8,123 @@ Tags:
 
 ## Code in a TabPanel
 
-<?# TabPanel ?>
+<?# TabBlock ?>
 - C#
-  :::
-  ```csharp 
-  using HtmlAgilityPack;
-  using shortid;
+  ```csharp
+  using System;
   using System.Collections.Generic;
   using System.Linq;
+  using System.Xml;
+  using System.Xml.Linq;
+  using shortid;
   using Wyam.Common.Documents;
   using Wyam.Common.Execution;
   using Wyam.Common.Shortcodes;
 
-  namespace JupiterNebula.Website.Shortcodes.TabPanel
+  namespace JupiterNebula.Wyam.Shortcodes.TabBlock
   {
-      public class TabPanel : IShortcode
+      public class TabBlock : IShortcode
       {
-          private string CreateTabContentIdPrefix() => $"TabPanel__{ShortId.Generate()}";
+          private static string CreateBaseId() => $"{nameof(TabBlock)}__{ShortId.Generate(true, false)}";
+          private static string CreateTabId(string baseId, int tabNumber) => $"{baseId}-{tabNumber}";
+          private static string CreateTabLinkId(string tabId) => tabId + "-link";
+          private static string CreateTabPaneId(string tabId) => tabId + "-pane";
 
-          public IShortcodeResult Execute(KeyValuePair<string, string>[] args, string content, IDocument document, IExecutionContext context)
+          #region Tab List
+          private static XElement CreateTabLink(XNode labelNode, bool active, string tabId)
           {
-              var contentHtml = new HtmlDocument();
-              contentHtml.LoadHtml(content);
+              var linkElement = new XElement("a", labelNode);
+              var tabPaneId = CreateTabPaneId(tabId);
 
-              var tabListElement = contentHtml.DocumentNode?.SelectSingleNode("/ul");
-              var tabElements = tabListElement?.SelectNodes("./li");
+              linkElement.SetAttributeValue("class", $"nav-link{(active ? " active" : string.Empty)}");
+              linkElement.SetAttributeValue("data-toggle", "tab");
+              linkElement.SetAttributeValue("aria-selected", XmlConvert.ToString(active));
+              linkElement.SetAttributeValue("aria-controls", tabPaneId);
+              linkElement.SetAttributeValue("href", '#' + tabPaneId);
+              linkElement.SetAttributeValue("id", CreateTabLinkId(tabId));
 
-              if (tabElements is null)
-              {
-                  return context.GetShortcodeResult(content);
-              }
+              return linkElement;
+          }
 
-              string idPrefix = CreateTabContentIdPrefix();
-              int idSuffix = 0;
+          private static XElement CreateTab(XNode labelNode, bool active, string tabId)
+          {
+              var tabElement = new XElement("li", CreateTabLink(labelNode, active, tabId));
+              tabElement.SetAttributeValue("class", "nav-item");
 
-              tabListElement.AddClass("nav nav-tabs");
-              tabListElement.SetAttributeValue("role", "tablist");
-              tabListElement.Id = idPrefix;
+              return tabElement;
+          }
 
-              var tabContentWrapElement = contentHtml.CreateElement("div");
-              tabContentWrapElement.AddClass("tab-content");
+          private static XElement CreateTabList(IEnumerable<XElement> shortcodeTabs, 
+              Func<XElement, XNode> labelSelector, string baseId)
+          {
+              int tabCount = 0;
+              var tabList =  new XElement("ul", 
+                  shortcodeTabs.Select(n => labelSelector(n))
+                               .Select(n => CreateTab(n, tabCount == 0, CreateTabId(baseId, tabCount++))));
+              
+              tabList.SetAttributeValue("class", "nav nav-tabs");
+              tabList.SetAttributeValue("role", "tablist");
 
-              foreach (var tabElement in tabElements)
-              {
-                  var tabContentElement = tabElement.SelectSingleNode("./div");
+              return tabList;
+          }
+          #endregion
 
-                  tabContentElement.Id = $"{idPrefix}-{idSuffix++}";
-                  tabContentElement.AddClass("tab-pane fade");
-                  tabContentElement.SetAttributeValue("role", "tabpanel");
-                  tabContentElement.SetAttributeValue("aria-labelledby", tabContentElement.Id + "-tab");
+          #region Tab Content
+          private static XElement CreateTabPane(IEnumerable<XNode> contentNodes, bool active, string tabId)
+          {
+              var tabPane = new XElement("div", contentNodes);
 
-                  tabElement.RemoveChild(tabContentElement);
-                  tabContentWrapElement.AppendChild(tabContentElement);
+              tabPane.SetAttributeValue("class", $"tab-pane{(active ? " show active" : string.Empty)}");
+              tabPane.SetAttributeValue("role", "tabpanel");
+              tabPane.SetAttributeValue("aria-labelledby", CreateTabLinkId(tabId));
+              tabPane.SetAttributeValue("id", CreateTabPaneId(tabId));
 
-                  var anchorElementInnerHtml = tabElement.InnerHtml;
-                  tabElement.InnerHtml = string.Empty;
-                  tabElement.AddClass("nav-item");
+              return tabPane;
+          }
 
-                  var anchorElement = contentHtml.CreateElement("a");
-                  anchorElement.AddClass("nav-link");
-                  anchorElement.SetAttributeValue("data-toggle", "tab");
-                  anchorElement.SetAttributeValue("href", "#" + tabContentElement.Id);
-                  anchorElement.SetAttributeValue("role", "tab");
-                  anchorElement.SetAttributeValue("aria-controls", tabContentElement.Id);
-                  anchorElement.SetAttributeValue("aria-selected", "false");
-                  anchorElement.InnerHtml = anchorElementInnerHtml;
-                  anchorElement.Id = tabContentElement.Id + "-tab";
+          private static XElement CreateTabPaneContainer(IEnumerable<XElement> shortcodeTabs, 
+              Func<XElement, IEnumerable<XNode>> contentSelector, string baseId)
+          {
+              int tabCount = 0;
 
-                  tabElement.AppendChild(anchorElement);
-              }
+              var tabContent = new XElement("div", 
+                  shortcodeTabs.Select(contentSelector)
+                               .Select(n => CreateTabPane(n, tabCount == 0, CreateTabId(baseId, tabCount++))));
 
-              var firstTabElement = tabElements.FirstOrDefault()?.FirstChild;
-              firstTabElement?.AddClass("active");
-              firstTabElement?.SetAttributeValue("aria-selected", "true");
-              tabContentWrapElement.FirstChild?.AddClass("show active");
+              tabContent.SetAttributeValue("class", "tab-content");
 
-              if (tabContentWrapElement.HasChildNodes)
-              {
-                  contentHtml.DocumentNode.AppendChild(tabContentWrapElement);
-              }
+              return tabContent;
+          }
+          #endregion
 
-              return context.GetShortcodeResult(contentHtml.DocumentNode.OuterHtml);
+          private static XElement CreateTabBlock(IEnumerable<XElement> shortcodeTabs, 
+              Func<XElement, XNode> tabLabelSelector, Func<XElement, IEnumerable<XNode>> tabContentSelector)
+          {
+              var baseId = CreateBaseId();
+
+              var tabBlock = new XElement("div", 
+                  CreateTabList(shortcodeTabs, tabLabelSelector, baseId),
+                  CreateTabPaneContainer(shortcodeTabs, tabContentSelector, baseId));
+
+              tabBlock.SetAttributeValue("class", "tab-block");
+              tabBlock.SetAttributeValue("id", baseId);
+
+              return tabBlock;
+          }
+
+          public IShortcodeResult Execute(KeyValuePair<string, string>[] args, string content,
+              IDocument document, IExecutionContext context)
+          {
+              var contentElement = XElement.Parse(content);
+              var tabBlock = CreateTabBlock(contentElement.Elements("li"),
+                  nameof => nameof.FirstNode, n => n.Nodes().Skip(1));
+              
+              return context.GetShortcodeResult(tabBlock.ToString(SaveOptions.DisableFormatting));
           }
       }
   }
   ```
-  :::
 - F#
-  :::
   ```fsharp
   // Taken from: https://fsharpforfunandprofit.com/posts/fsharp-in-60-seconds/
   // single line comments use a double slash
@@ -212,7 +241,6 @@ Tags:
   // There are also sprintf/sprintfn functions for formatting data
   // into a string, similar to String.Format.
   ```
-  :::
-<?#/ TabPanel ?>
+<?#/ TabBlock ?>
 
 asdf

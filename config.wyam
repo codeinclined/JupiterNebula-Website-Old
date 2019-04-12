@@ -3,9 +3,8 @@
 #recipe Blog
 #theme BlogTemplate
 #nuget Wyam.Minification
-#nuget HtmlAgilityPack
 #nuget shortid
-#assembly classlibs/**/bin/**/JupiterNebula.Website.*.dll
+#assembly classlibs/**/bin/**/*.dll
 
 Settings[Keys.Host] = "jupiternebula.com";
 Settings[BlogKeys.Title] = "JupiterNebula";
