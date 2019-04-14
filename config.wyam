@@ -3,8 +3,7 @@
 #recipe Blog
 #theme BlogTemplate
 #nuget Wyam.Minification
-#nuget shortid
-#assembly classlibs/**/bin/**/*.dll
+#nuget JupiterNebula.Wyam.Shortcodes.TabBlock
 
 Settings[Keys.Host] = "jupiternebula.com";
 Settings[BlogKeys.Title] = "JupiterNebula";

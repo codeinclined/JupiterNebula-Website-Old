@@ -19,18 +19,11 @@ steps:
     packageType: 'sdk'
     version: '2.2.102'
 
-- task: DotNetCoreCLI@2
-  displayName: Build classlib projects
-  inputs:
-    command: build
-    projects: 'classlibs/**/*.csproj'
-    arguments: '--configuration $(configuration)'
-
 - script: dotnet tool install -g Wyam.Tool
-  displayName: Install Wyam
+  displayName: Install Wyam Tool
 
 - script: wyam build
-  displayName: Build Site
+  displayName: Wyam Build
 
 - task: ArchiveFiles@2
   displayName: Zip Site
